@@ -58,6 +58,30 @@ def chat():
 
     except Exception as e:
         return jsonify({"error": str(e)})
+# Route to handle college prediction
+@app.route("/predict", methods=["POST"])
+def predict_college():
+    try:
+        data = request.json
+        rank = int(data.get("rank", 0))
+        category = data.get("category")
+        cluster = data.get("clusterPreferences", [])
+        place = data.get("placePreferences", [])
+
+        # Dummy predictions for testing
+        predicted_colleges = []
+        if rank <= 10000:
+            predicted_colleges.append({"name": "RVCE", "branch": "CSE", "cutoff": 7000})
+        if rank <= 20000:
+            predicted_colleges.append({"name": "BMSCE", "branch": "ISE", "cutoff": 15000})
+
+        if not predicted_colleges:
+            return jsonify({"colleges": [], "message": "No colleges found for this rank."})
+
+        return jsonify({"colleges": predicted_colleges})
+
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 # Run the Flask app
 if __name__ == "__main__":
